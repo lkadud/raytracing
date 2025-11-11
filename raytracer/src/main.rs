@@ -148,7 +148,7 @@ fn main() {
     // Camera
     let focal_length = 1.0;
     let viewport_height = 2.0;
-    let viewport_width= viewport_height * (image_width / image_height) as f64; //or individual as?
+    let viewport_width= viewport_height * (image_width as f64 / image_height as f64);
     let camera_center = point3{x: 0.0, y: 0.0, z: 0.0}; 
 
     // Calculate the vectors across the horizontal and down the vertical viewport edges
