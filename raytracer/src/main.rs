@@ -86,8 +86,6 @@ impl std::ops::DivAssign<vec3> for vec3 {
     }
 }
 
-use std::mem::Discriminant;
-
 use vec3 as point3;
 use vec3 as Color;
 
@@ -96,9 +94,9 @@ fn write_color(pixel_color: Color) { // maybe add ostream here
     let g = pixel_color.y;
     let b = pixel_color.z;
 
-    let rbyte = (255.999 * r) as i8;
-    let gbyte = (255.999 * g) as i8;
-    let bbyte = (255.999 * b) as i8;
+    let rbyte = (255.999 * r) as u8;
+    let gbyte = (255.999 * g) as u8;
+    let bbyte = (255.999 * b) as u8;
 
     print!("{rbyte} {gbyte} {bbyte}\n");
 }
@@ -122,7 +120,7 @@ impl ray {
 }
 fn ray_color(r: ray) -> Color {
     if (hit_sphere(point3{x:0.0, y:0.0, z:-1.0}, 0.5, r)) {
-        return Color{x: 1.0, y: 0.0,z: 0.0}
+        return Color{x: 1.0, y: 0.0, z: 0.0}
     }
     let unit_direction = r.direction().unit_vector();
     let a  = (unit_direction.y + 1.0)*0.5;
