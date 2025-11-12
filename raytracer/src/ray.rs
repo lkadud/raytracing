@@ -1,16 +1,18 @@
-use crate::vec3::{Color, Point3, Vec3};
+use crate::{
+    common,
+    hittable::{HitRecord, Hittable},
+    hittable_list::HittableList,
+    vec3::{Color, Point3, Vec3},
+};
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Default)]
 pub struct Ray {
     origin: Point3,
     direction: Vec3,
 }
 impl Ray {
     pub fn new(origin: Point3, direction: Vec3) -> Ray {
-        Ray {
-            origin: origin,
-            direction: direction,
-        }
+        Ray { origin, direction }
     }
     pub fn origin(&self) -> Point3 {
         self.origin
@@ -22,12 +24,12 @@ impl Ray {
         self.origin + self.direction * t
     }
 }
-pub fn ray_color(r: &Ray) -> Color {
-    let t = hit_sphere(Point3::new(0.0, 0.0, -1.0), 0.5, r);
-    if t > 0.0 {
-        let N = (r.at(t) - Vec3::new(0.0, 0.0, -1.0)).unit_vector();
-        return Color::new(N.x() + 1.0, N.y() + 1.0, N.z() + 1.0) * 0.5;
+pub fn ray_color(r: &Ray, world: &dyn Hittable) -> Color {
+    let mut rec = HitRecord::new();
+    if world.hit(r, 0.0, common::INFINITY, &mut rec) {
+        return (rec.normal + Color::new(1.0, 1.0, 1.0));
     }
+
     let unit_direction = r.direction().unit_vector();
     let a = (unit_direction.y() + 1.0) * 0.5;
     Color::new(1.0, 1.0, 1.0) * (1.0 - a) + Color::new(0.5, 0.7, 1.0) * a
@@ -40,8 +42,8 @@ fn hit_sphere(center: Point3, radius: f64, r: &Ray) -> f64 {
     let c = oc.length_squared() - radius * radius;
     let discriminant = h * h - a * c;
     if discriminant < 0.0 {
-        return -1.0;
+        -1.0
     } else {
-        return (h - discriminant.sqrt()) / (a);
+        (h - discriminant.sqrt()) / (a)
     }
 }
