@@ -2,6 +2,7 @@ use crate::{
     common,
     hittable::{HitRecord, Hittable},
     hittable_list::HittableList,
+    interval::Interval,
     vec3::{Color, Point3, Vec3},
 };
 
@@ -24,17 +25,8 @@ impl Ray {
         self.origin + self.direction * t
     }
 }
-pub fn ray_color(r: &Ray, world: &dyn Hittable) -> Color {
-    let mut rec = HitRecord::new();
-    if world.hit(r, 0.0, common::INFINITY, &mut rec) {
-        return (rec.normal + Color::new(1.0, 1.0, 1.0));
-    }
 
-    let unit_direction = r.direction().unit_vector();
-    let a = (unit_direction.y() + 1.0) * 0.5;
-    Color::new(1.0, 1.0, 1.0) * (1.0 - a) + Color::new(0.5, 0.7, 1.0) * a
-}
-
+/*
 fn hit_sphere(center: Point3, radius: f64, r: &Ray) -> f64 {
     let oc = center - r.origin();
     let a = r.direction().length_squared();
@@ -47,3 +39,4 @@ fn hit_sphere(center: Point3, radius: f64, r: &Ray) -> f64 {
         (h - discriminant.sqrt()) / (a)
     }
 }
+*/
