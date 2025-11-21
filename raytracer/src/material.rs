@@ -1,3 +1,4 @@
+use crate::common;
 use crate::hittable::HitRecord;
 use crate::ray::Ray;
 use crate::vec3::{Color, Vec3};
@@ -82,6 +83,11 @@ impl Dielectric {
             n: refractive_index,
         }
     }
+    fn reflectance(cosine: f64, ri: f64) -> f64 {
+        let mut r0 = (1.0 - ri) / (1.0 + ri);
+        r0 = r0 * r0;
+        r0 + (1.0 - r0) * (1.0 - cosine).powf(5.0)
+    }
 }
 
 impl Material for Dielectric {
@@ -98,9 +104,18 @@ impl Material for Dielectric {
             self.n
         };
         let unit_direction = r_in.direction().unit_vector();
-        let refracted = Vec3::refract(unit_direction, rec.normal, ri);
+        let cos_theta = -unit_direction.dot(rec.normal).min(1.0);
+        let sin_theta = (1.0 - cos_theta * cos_theta).sqrt();
 
-        *scattered = Ray::new(rec.p, refracted);
+        let cannot_refract = ri * sin_theta > 1.0;
+        let direction =
+            if (cannot_refract || Self::reflectance(cos_theta, ri) > common::random_number()) {
+                Vec3::reflect(unit_direction, rec.normal)
+            } else {
+                Vec3::refract(unit_direction, rec.normal, ri)
+            };
+
+        *scattered = Ray::new(rec.p, direction);
         *attenuation = Color::new(1.0, 1.0, 1.0);
         true
     }
