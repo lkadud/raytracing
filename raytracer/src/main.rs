@@ -2,10 +2,8 @@ mod vec3;
 use crate::vec3::{Color, Point3, Vec3};
 
 mod ray;
-use crate::ray::Ray;
 
 mod hittable;
-use crate::hittable::{HitRecord, Hittable};
 
 mod hittable_list;
 use crate::hittable_list::HittableList;
@@ -14,16 +12,14 @@ mod sphere;
 use crate::sphere::Sphere;
 
 mod interval;
-use crate::interval::Interval;
 
 mod camera;
 use crate::camera::Camera;
 
 mod material;
-use crate::material::{Dielectric, Lambertian, Material, Metal};
+use crate::material::{Dielectric, Lambertian, Metal};
 
 mod common;
-use crate::common::degrees_to_radians;
 
 use std::rc::Rc;
 

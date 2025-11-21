@@ -98,7 +98,7 @@ impl Material for Dielectric {
         attenuation: &mut Color,
         scattered: &mut Ray,
     ) -> bool {
-        let ri = if (rec.front_face) {
+        let ri = if rec.front_face {
             1.0 / self.n
         } else {
             self.n
@@ -109,7 +109,7 @@ impl Material for Dielectric {
 
         let cannot_refract = ri * sin_theta > 1.0;
         let direction =
-            if (cannot_refract || Self::reflectance(cos_theta, ri) > common::random_number()) {
+            if cannot_refract || Self::reflectance(cos_theta, ri) > common::random_number() {
                 Vec3::reflect(unit_direction, rec.normal)
             } else {
                 Vec3::refract(unit_direction, rec.normal, ri)

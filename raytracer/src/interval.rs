@@ -1,4 +1,3 @@
-use crate::common::INFINITY;
 
 pub struct Interval {
     min: f64,

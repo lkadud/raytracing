@@ -1,4 +1,3 @@
-use core::panic;
 
 use crate::{
     common::{self, degrees_to_radians},

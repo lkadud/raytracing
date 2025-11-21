@@ -1,10 +1,4 @@
-use crate::{
-    common,
-    hittable::{HitRecord, Hittable},
-    hittable_list::HittableList,
-    interval::Interval,
-    vec3::{Color, Point3, Vec3},
-};
+use crate::vec3::{Point3, Vec3};
 
 #[derive(Debug, Clone, Copy, Default)]
 pub struct Ray {

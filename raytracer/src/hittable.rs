@@ -1,8 +1,8 @@
 use std::rc::Rc;
 
-use crate::interval::{self, Interval};
+use crate::interval::Interval;
 use crate::material::Material;
-use crate::ray::{self, Ray};
+use crate::ray::Ray;
 use crate::vec3::{Point3, Vec3};
 
 #[derive(Clone, Default)]
