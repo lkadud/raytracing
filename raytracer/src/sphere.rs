@@ -14,8 +14,8 @@ pub struct Sphere {
 impl Sphere {
     pub fn new(center: Point3, radius: f64, m: Rc<dyn Material>) -> Sphere {
         Sphere {
-            center: center,
-            radius: radius,
+            center,
+            radius,
             mat: m,
         }
     }
@@ -47,6 +47,6 @@ impl Hittable for Sphere {
         let outward_normal = (rec.p - self.center) / self.radius;
         rec.set_face_normal(ray, outward_normal);
         rec.mat = Some(self.mat.clone());
-        return true;
+        true
     }
 }

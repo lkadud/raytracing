@@ -12,7 +12,7 @@ impl Interval {
     //    }
     //}
     pub fn new(min: f64, max: f64) -> Interval {
-        Interval { min: min, max: max }
+        Interval { min, max }
     }
     pub fn contains(&self, x: f64) -> bool {
         self.min <= x && x <= self.max
