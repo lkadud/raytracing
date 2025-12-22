@@ -5,3 +5,6 @@ Raytracer written in [Rust](https://rust-lang.org/), following the [Ray Tracing 
 Currently, chapter one of three is implemented.
 
 Run with: `cargo run --release > image.ppm`
+
+Exemplary output: 
+![Output](./image.png)
