@@ -7,4 +7,5 @@ Currently, chapter one of three is implemented.
 Run with: `cargo run --release > image.ppm`
 
 Exemplary output: 
+
 ![Output](./image.png)
