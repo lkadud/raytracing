@@ -21,13 +21,12 @@ use crate::material::{Dielectric, Lambertian, Metal};
 
 mod common;
 
-use std::rc::Rc;
-
+use std::sync::Arc;
 fn main() {
     let mut world = HittableList::new();
 
     // Adding ground
-    let material_ground = Rc::new(Lambertian::new(Color::new(0.5, 0.5, 0.5)));
+    let material_ground = Arc::new(Lambertian::new(Color::new(0.5, 0.5, 0.5)));
     world.add(Box::new(Sphere::new(
         Point3::new(0.0, -1000.0, 0.0),
         1000.0,
@@ -47,16 +46,16 @@ fn main() {
             if (center - Point3::new(4.0, 0.2, 0.0)).length() > 0.9 {
                 if (choose_mat < 0.8) {
                     let albedo = Color::random() * Color::random();
-                    let sphere_material = Rc::new(Lambertian::new(albedo));
+                    let sphere_material = Arc::new(Lambertian::new(albedo));
                     world.add(Box::new(Sphere::new(center, 0.2, sphere_material)));
                 } else if (choose_mat < 0.95) {
                     let albedo = Color::random_interval(0.5, 1.0);
                     let fuzz = common::random_number_interval(0.0, 0.5);
-                    let sphere_material = Rc::new(Metal::new(albedo, fuzz));
+                    let sphere_material = Arc::new(Metal::new(albedo, fuzz));
                     world.add(Box::new(Sphere::new(center, 0.2, sphere_material)));
                 } else {
                     let n = common::random_number_interval(1.0, 1.5);
-                    let sphere_material = Rc::new(Dielectric::new(n));
+                    let sphere_material = Arc::new(Dielectric::new(n));
                     world.add(Box::new(Sphere::new(center, 0.2, sphere_material)));
                 };
             }
@@ -64,19 +63,19 @@ fn main() {
     }
 
     // Adding large objects
-    let material1 = Rc::new(Dielectric::new(1.5));
+    let material1 = Arc::new(Dielectric::new(1.5));
     world.add(Box::new(Sphere::new(
         Point3::new(0.0, 1.0, 0.0),
         1.0,
         material1,
     )));
-    let material2 = Rc::new(Lambertian::new(Color::new(0.4, 0.2, 0.1)));
+    let material2 = Arc::new(Lambertian::new(Color::new(0.4, 0.2, 0.1)));
     world.add(Box::new(Sphere::new(
         Point3::new(4.0, 1.0, 0.0),
         1.0,
         material2,
     )));
-    let material3 = Rc::new(Metal::new(Color::new(0.7, 0.6, 0.6), 0.0));
+    let material3 = Arc::new(Metal::new(Color::new(0.7, 0.6, 0.6), 0.0));
     world.add(Box::new(Sphere::new(
         Point3::new(-4.0, 1.0, 0.0),
         1.0,
@@ -103,11 +102,11 @@ fn main() {
     // World
     let mut world = HittableList::new();
 
-    let material_ground = Rc::new(Lambertian::new(Color::new(0.8, 0.8, 0.0)));
-    let material_center = Rc::new(Lambertian::new(Color::new(0.1, 0.2, 0.5)));
-    let material_left = Rc::new(Dielectric::new(1.5));
-    let material_bubble = Rc::new(Dielectric::new(1.0 / 1.5));
-    let material_right = Rc::new(Metal::new(Color::new(0.8, 0.6, 0.2), 0.0));
+    let material_ground = Arc::new(Lambertian::new(Color::new(0.8, 0.8, 0.0)));
+    let material_center = Arc::new(Lambertian::new(Color::new(0.1, 0.2, 0.5)));
+    let material_left = Arc::new(Dielectric::new(1.5));
+    let material_bubble = Arc::new(Dielectric::new(1.0 / 1.5));
+    let material_right = Arc::new(Metal::new(Color::new(0.8, 0.6, 0.2), 0.0));
 
     world.add(Box::new(Sphere::new(
         Point3::new(0.0, -100.5, -1.0),

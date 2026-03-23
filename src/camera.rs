@@ -6,6 +6,8 @@ use crate::{
     vec3::{Color, Point3, Vec3},
 };
 
+use rayon::prelude::*;
+
 fn linear_to_gamma(linear_component: f64) -> f64 {
     if linear_component > 0.0 {
         return linear_component.sqrt();
@@ -56,14 +58,29 @@ impl Camera {
         print!("P3\n{} {}\n255\n", self.image_width, self.image_height);
         for j in 0..self.image_height {
             eprint!("\r Scanlines remaining: {} ", self.image_height - j);
-            for i in 0..self.image_width {
-                let mut pixel_color = Color::new(0.0, 0.0, 0.0);
-                for sample in 0..self.samples_per_pixel {
-                    let r = self.get_ray(i, j);
-                    pixel_color += self.ray_color(&r, self.max_depth, world);
-                }
+            let pixel_colors: Vec<_> = (0..self.image_width)
+                .into_par_iter()
+                .map(|i| {
+                    let mut pixel_color = Color::new(0.0, 0.0, 0.0);
+                    for sample in 0..self.samples_per_pixel {
+                        let r = self.get_ray(i, j);
+                        pixel_color += self.ray_color(&r, self.max_depth, world);
+                    }
+                    pixel_color
+                })
+                .collect();
+            for pixel_color in pixel_colors {
                 write_color(pixel_color * self.pixel_samples_scale);
             }
+
+            //for i in 0..self.image_width {
+            //    let mut pixel_color = Color::new(0.0, 0.0, 0.0);
+            //    for sample in 0..self.samples_per_pixel {
+            //        let r = self.get_ray(i, j);
+            //        pixel_color += self.ray_color(&r, self.max_depth, world);
+            //    }
+            //    write_color(pixel_color * self.pixel_samples_scale);
+            //}
         }
         eprint!("\rDone.                      \n");
     }

@@ -1,9 +1,8 @@
-use std::rc::Rc;
-
 use crate::interval::Interval;
 use crate::material::Material;
 use crate::ray::Ray;
 use crate::vec3::{Point3, Vec3};
+use std::sync::Arc;
 
 #[derive(Clone, Default)]
 pub struct HitRecord {
@@ -11,7 +10,7 @@ pub struct HitRecord {
     pub normal: Vec3,
     pub t: f64,
     pub front_face: bool,
-    pub mat: Option<Rc<dyn Material>>,
+    pub mat: Option<Arc<dyn Material>>,
 }
 
 impl HitRecord {
@@ -29,6 +28,6 @@ impl HitRecord {
     }
 }
 
-pub trait Hittable {
+pub trait Hittable: Send + Sync {
     fn hit(&self, ray: &Ray, ray_t: Interval, rec: &mut HitRecord) -> bool;
 }

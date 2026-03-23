@@ -3,7 +3,7 @@ use crate::hittable::HitRecord;
 use crate::ray::Ray;
 use crate::vec3::{Color, Vec3};
 
-pub trait Material {
+pub trait Material: Send + Sync {
     fn scatter(
         &self,
         r_in: &Ray,
@@ -98,11 +98,7 @@ impl Material for Dielectric {
         attenuation: &mut Color,
         scattered: &mut Ray,
     ) -> bool {
-        let ri = if rec.front_face {
-            1.0 / self.n
-        } else {
-            self.n
-        };
+        let ri = if rec.front_face { 1.0 / self.n } else { self.n };
         let unit_direction = r_in.direction().unit_vector();
         let cos_theta = -unit_direction.dot(rec.normal).min(1.0);
         let sin_theta = (1.0 - cos_theta * cos_theta).sqrt();
